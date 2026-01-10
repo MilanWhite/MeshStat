@@ -11,6 +11,9 @@ import NotFoundPage from "../pages/General/NotFoundPage.tsx";
 import SignIn from "../components/Auth/SignIn";
 import GeneralHomePage from "../pages/General/GeneralHomePage";
 import DashboardPage from "../pages/Authenticated/DashboardPage";
+import HeatmapPage from "../pages/Authenticated/HeatmapPage";
+import SoundDataPage from "../pages/Authenticated/SoundDataPage";
+import AIToolsPage from "../pages/Authenticated/AIToolsPage";
 
 import { PublicRoute } from "../routers/PublicRoute.tsx";
 import { AuthenticatedRoute } from "../routers/AuthenticatedRoute.tsx";
@@ -54,6 +57,33 @@ const router = createBrowserRouter([
 				element: (
 					<AuthenticatedRoute>
 						<DashboardPage />
+					</AuthenticatedRoute>
+				),
+			},
+
+			{
+				path: URLS.heatmapPage,
+				element: (
+					<AuthenticatedRoute>
+						<HeatmapPage />
+					</AuthenticatedRoute>
+				),
+			},
+
+			{
+				path: URLS.soundDataPage,
+				element: (
+					<AuthenticatedRoute>
+						<SoundDataPage />
+					</AuthenticatedRoute>
+				),
+			},
+
+			{
+				path: URLS.aiToolsPage,
+				element: (
+					<AuthenticatedRoute>
+						<AIToolsPage />
 					</AuthenticatedRoute>
 				),
 			},

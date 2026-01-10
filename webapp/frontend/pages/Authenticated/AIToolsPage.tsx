@@ -1,9 +1,9 @@
 import Sidebar from "../../components/Sidebar";
 
-export default function DashboardPage() {
+export default function AIToolsPage() {
 	return (
 		<>
-			<Sidebar>Hello World</Sidebar>
+			<Sidebar>AI TOols</Sidebar>
 		</>
 	);
 }

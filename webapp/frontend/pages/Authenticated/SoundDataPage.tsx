@@ -1,9 +1,9 @@
 import Sidebar from "../../components/Sidebar";
 
-export default function DashboardPage() {
+export default function HeatmapPage() {
 	return (
 		<>
-			<Sidebar>Hello World</Sidebar>
+			<Sidebar>Sound Data</Sidebar>
 		</>
 	);
 }

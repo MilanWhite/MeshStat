@@ -12,6 +12,7 @@
   "dependencies": {
     "@aws-amplify/ui-react": "^6.13.2",
     "@headlessui/react": "^2.2.9",
+    "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.18",
     "aws-amplify": "^6.15.9",
     "react": "^19.2.0",
