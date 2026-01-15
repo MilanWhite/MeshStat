@@ -260,13 +260,13 @@ export default function SignIn() {
 			<div className="sm:mx-auto sm:w-full sm:max-w-sm">
 				<img
 					alt="Your Company"
-					src="../../src/assets/SharkFinderLogoSmall.png"
-					className="mx-auto h-10 w-auto dark:hidden"
+					src="../../src/assets/meshstat_logo_white.svg"
+					className="mx-auto h-20 w-auto dark:hidden"
 				/>
 				<img
 					alt="Your Company"
-					src="../../src/assets/SharkFinderLogoSmall.png"
-					className="mx-auto h-10 w-auto not-dark:hidden"
+					src="../../src/assets/meshstat_logo_white.svg"
+					className="mx-auto h-20 w-auto not-dark:hidden"
 				/>
 				<h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-white">
 					{title}

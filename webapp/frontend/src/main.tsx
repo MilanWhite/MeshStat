@@ -12,7 +12,7 @@ import SignIn from "../components/Auth/SignIn";
 import GeneralHomePage from "../pages/General/GeneralHomePage";
 import DashboardPage from "../pages/Authenticated/DashboardPage";
 import HeatmapPage from "../pages/Authenticated/HeatmapPage";
-import SoundDataPage from "../pages/Authenticated/SoundDataPage";
+import SensorDataPage from "../pages/Authenticated/SensorDataPage.tsx";
 import AIToolsPage from "../pages/Authenticated/AIToolsPage";
 
 import { PublicRoute } from "../routers/PublicRoute.tsx";
@@ -71,10 +71,10 @@ const router = createBrowserRouter([
 			},
 
 			{
-				path: URLS.soundDataPage,
+				path: URLS.sensorDataPage,
 				element: (
 					<AuthenticatedRoute>
-						<SoundDataPage />
+						<SensorDataPage />
 					</AuthenticatedRoute>
 				),
 			},

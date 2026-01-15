@@ -13,13 +13,11 @@ import {
 } from "@headlessui/react";
 import {
 	Bars3Icon,
-	CalendarIcon,
-	ChartPieIcon,
-	DocumentDuplicateIcon,
+	MapPinIcon,
+	BeakerIcon,
 	ArrowRightStartOnRectangleIcon,
 	FolderIcon,
 	HomeIcon,
-	UsersIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
@@ -30,13 +28,13 @@ interface SidebarProps {
 
 const navigation = [
 	{ name: "Dashboard", href: "/dashboard", icon: HomeIcon },
-	{ name: "Heatmap", href: "/heatmap", icon: UsersIcon },
+	{ name: "Heatmap", href: "/heatmap", icon: MapPinIcon },
 	{
-		name: "Sound Data",
-		href: "/sound-data",
+		name: "Sensor Data",
+		href: "/sensor-data",
 		icon: FolderIcon,
 	},
-	{ name: "AI Tools", href: "/ai-tools", icon: CalendarIcon },
+	{ name: "AI Tools", href: "/ai-tools", icon: BeakerIcon },
 ];
 
 function classNames(...classes: any[]) {
@@ -117,12 +115,12 @@ export default function Sidebar({ children }: SidebarProps) {
 								<div className="relative flex h-16 shrink-0 items-center">
 									<img
 										alt="Your Company"
-										src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+										src="../../src/assets/meshstat_logo_white.svg"
 										className="h-8 w-auto dark:hidden"
 									/>
 									<img
 										alt="Your Company"
-										src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+										src="../../src/assets/meshstat_logo_white.svg"
 										className="h-8 w-auto not-dark:hidden"
 									/>
 								</div>
@@ -187,12 +185,12 @@ export default function Sidebar({ children }: SidebarProps) {
 						<div className="flex h-16 shrink-0 items-center">
 							<img
 								alt="Your Company"
-								src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+								src="../../src/assets/meshstat_logo_white.svg"
 								className="h-8 w-auto dark:hidden"
 							/>
 							<img
 								alt="Your Company"
-								src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+								src="../../src/assets/meshstat_logo_white.svg"
 								className="h-8 w-auto not-dark:hidden"
 							/>
 						</div>
