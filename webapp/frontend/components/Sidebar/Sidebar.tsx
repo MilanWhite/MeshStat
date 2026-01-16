@@ -80,12 +80,6 @@ const navigation: NavItem[] = [
 			},
 		],
 	},
-	{
-		type: "link",
-		name: "Shade Map",
-		href: "/shade-map",
-		icon: GlobeAmericasIcon,
-	},
 ];
 
 function classNames(...classes: any[]) {
@@ -176,7 +170,7 @@ function SidebarNav({
 										/>
 									</DisclosureButton>
 
-									<DisclosurePanel className="mt-1 space-y-1 pl-6">
+									<DisclosurePanel className="mt-1 space-y-1 pl-6 cursor-pointer">
 										{item.items.map((child) => {
 											const active = isActive(
 												pathname,

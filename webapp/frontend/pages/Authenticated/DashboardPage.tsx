@@ -464,7 +464,7 @@ function buildDashboardFromApi(latestRows: LatestRowApi[], range: RangeResponse,
 		thresholds: {
 			elevated_c: HEAT_ELEVATED_C,
 			high_c: HEAT_HIGH_C,
-			note: "Temp-only proxy (no humidity/humidex available).",
+			note: "Temp-only threshold (no humidity/humidex available).",
 		},
 		heat_risk: {
 			city_now: {
@@ -475,7 +475,7 @@ function buildDashboardFromApi(latestRows: LatestRowApi[], range: RangeResponse,
 				total_reporting_sensors: totalTempNow,
 			},
 			series_24h: heatRiskSeries24h(),
-			note: "Counts use per-sensor hourly mean temperature; thresholds are proxy cutoffs.",
+			note: "Counts use per-sensor hourly mean temperature.",
 		},
 		top_hotspots_now: topTempHotspots,
 		trend: { city_24h: cityTempTrend24 },
@@ -489,7 +489,7 @@ function buildDashboardFromApi(latestRows: LatestRowApi[], range: RangeResponse,
 			day_db: NOISE_DAY_VIOLATION_DB,
 			night_db: NOISE_NIGHT_VIOLATION_DB,
 			current_db: noiseThrNow,
-			note: "Proxy based on measured dBA + day/night; Kingston bylaw itself is activity/time-based.",
+			note: "Threshold based on measured dBA + day/night; Kingston bylaw itself is activity/time-based.",
 		},
 		top_hotspots_now: topNoiseHotspots,
 		noise_violations: noiseViolations,
@@ -634,7 +634,6 @@ export default function DashboardPage() {
 									</span>
 									<span>
 										High ≥ {temp?.thresholds.high_c ?? HEAT_HIGH_C}°C{" "}
-										<span className="opacity-60">(proxy)</span>
 									</span>
 								</div>
 
@@ -683,7 +682,7 @@ export default function DashboardPage() {
 								</div>
 							</Card>
 
-							<Card title="Heat risk (proxy)">
+							<Card title="Heat risk">
 								<div className="flex flex-wrap items-center gap-3 text-xs opacity-80 mb-3">
 									<span>
 										City now: <Badge label={cityHeatNow?.risk_label ?? "Unknown"} />
@@ -848,7 +847,7 @@ export default function DashboardPage() {
 										City 24h: <Badge label={noise?.trend.city_24h ?? "Unknown"} />
 									</span>
 									<span>
-										Violations (proxy): <span className="font-semibold">{noiseViolationCount}</span>
+										Violations: <span className="font-semibold">{noiseViolationCount}</span>
 									</span>
 									<span>
 										Threshold now: {noise?.thresholds.current_db ?? 0} dBA
@@ -945,7 +944,7 @@ export default function DashboardPage() {
 							</Card>
 
 							<div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-								<div className="text-sm font-semibold mb-2">Noise violations (proxy list)</div>
+								<div className="text-sm font-semibold mb-2">Noise violations</div>
 								<div className="space-y-2 text-sm">
 									{(noise?.noise_violations ?? []).length === 0 && <div className="opacity-80">None right now.</div>}
 									{(noise?.noise_violations ?? []).slice(0, 10).map((v) => (
