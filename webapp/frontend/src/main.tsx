@@ -14,6 +14,9 @@ import DashboardPage from "../pages/Authenticated/DashboardPage";
 import HeatmapPage from "../pages/Authenticated/HeatmapPage";
 import SensorDataPage from "../pages/Authenticated/SensorDataPage.tsx";
 import AIToolsPage from "../pages/Authenticated/AIToolsPage";
+import SensorPredictor from "../pages/Authenticated/SensorPredictor";
+import SensorAnalysis from "../pages/Authenticated/SensorAnalysis";
+import ShadeMap from "../pages/Authenticated/ShadeMap";
 
 import { PublicRoute } from "../routers/PublicRoute.tsx";
 import { AuthenticatedRoute } from "../routers/AuthenticatedRoute.tsx";
@@ -84,6 +87,33 @@ const router = createBrowserRouter([
 				element: (
 					<AuthenticatedRoute>
 						<AIToolsPage />
+					</AuthenticatedRoute>
+				),
+			},
+
+			{
+				path: URLS.sensorPredictor,
+				element: (
+					<AuthenticatedRoute>
+						<SensorPredictor />
+					</AuthenticatedRoute>
+				),
+			},
+
+			{
+				path: URLS.sensorAnalysis,
+				element: (
+					<AuthenticatedRoute>
+						<SensorAnalysis />
+					</AuthenticatedRoute>
+				),
+			},
+
+			{
+				path: URLS.shadeMap,
+				element: (
+					<AuthenticatedRoute>
+						<ShadeMap />
 					</AuthenticatedRoute>
 				),
 			},
