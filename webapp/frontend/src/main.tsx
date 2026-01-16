@@ -16,7 +16,6 @@ import SensorDataPage from "../pages/Authenticated/SensorDataPage.tsx";
 import AIToolsPage from "../pages/Authenticated/AIToolsPage";
 import SensorPredictor from "../pages/Authenticated/SensorPredictor";
 import SensorAnalysis from "../pages/Authenticated/SensorAnalysis";
-import ShadeMap from "../pages/Authenticated/ShadeMap";
 
 import { PublicRoute } from "../routers/PublicRoute.tsx";
 import { AuthenticatedRoute } from "../routers/AuthenticatedRoute.tsx";
@@ -105,15 +104,6 @@ const router = createBrowserRouter([
 				element: (
 					<AuthenticatedRoute>
 						<SensorAnalysis />
-					</AuthenticatedRoute>
-				),
-			},
-
-			{
-				path: URLS.shadeMap,
-				element: (
-					<AuthenticatedRoute>
-						<ShadeMap />
 					</AuthenticatedRoute>
 				),
 			},

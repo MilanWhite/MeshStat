@@ -35,6 +35,15 @@ function toDatetimeLocalValue(d: Date) {
 	return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
 }
 
+function clampDate(d: Date, min: Date, max: Date) {
+	const t = d.getTime();
+	const tMin = min.getTime();
+	const tMax = max.getTime();
+	if (t < tMin) return new Date(tMin);
+	if (t > tMax) return new Date(tMax);
+	return d;
+}
+
 function Card({
 	title,
 	children,
@@ -73,6 +82,28 @@ export default function SensorPredictor() {
 	const [sensorId, setSensorId] = useState<number | null>(null);
 	const [metric, setMetric] = useState<Metric>("celsius");
 
+	// --- 24h horizon window computed from "now" (kept fresh) ---
+	const [nowTick, setNowTick] = useState<number>(() => Date.now());
+	useEffect(() => {
+		const id = window.setInterval(() => setNowTick(Date.now()), 60_000);
+		return () => window.clearInterval(id);
+	}, []);
+
+	const minFutureDate = useMemo(() => new Date(nowTick), [nowTick]);
+	const maxFutureDate = useMemo(
+		() => new Date(nowTick + 24 * 60 * 60 * 1000),
+		[nowTick]
+	);
+
+	const minFutureAtStr = useMemo(
+		() => toDatetimeLocalValue(minFutureDate),
+		[minFutureDate]
+	);
+	const maxFutureAtStr = useMemo(
+		() => toDatetimeLocalValue(maxFutureDate),
+		[maxFutureDate]
+	);
+
 	const [futureAt, setFutureAt] = useState<string>(() =>
 		toDatetimeLocalValue(new Date(Date.now() + 2 * 60 * 60 * 1000))
 	);
@@ -82,6 +113,16 @@ export default function SensorPredictor() {
 	const [err, setErr] = useState<string | null>(null);
 
 	const [result, setResult] = useState<PredictResponse | null>(null);
+
+	// Clamp initial futureAt into [now, now+24h] once window is known/updates
+	useEffect(() => {
+		const d = new Date(futureAt);
+		if (Number.isNaN(d.getTime())) return;
+		const clamped = clampDate(d, minFutureDate, maxFutureDate);
+		const next = toDatetimeLocalValue(clamped);
+		if (next !== futureAt) setFutureAt(next);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [minFutureAtStr, maxFutureAtStr]);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -124,8 +165,39 @@ export default function SensorPredictor() {
 			: `Sensor ${selectedSensor.sensor_id}`;
 	}, [selectedSensor, sensorId]);
 
+	const futureDateObj = useMemo(() => new Date(futureAt), [futureAt]);
+
+	const horizonMinutes = useMemo(() => {
+		const t = futureDateObj.getTime();
+		if (Number.isNaN(t)) return null;
+		return Math.round((t - minFutureDate.getTime()) / 60000);
+	}, [futureDateObj, minFutureDate]);
+
+	const futureInRange = useMemo(() => {
+		const t = futureDateObj.getTime();
+		if (Number.isNaN(t)) return false;
+		return t >= minFutureDate.getTime() && t <= maxFutureDate.getTime();
+	}, [futureDateObj, minFutureDate, maxFutureDate]);
+
+	function onFutureChange(v: string) {
+		// Clamp manual typing/selection into range
+		const d = new Date(v);
+		if (Number.isNaN(d.getTime())) {
+			setFutureAt(v);
+			return;
+		}
+		const clamped = clampDate(d, minFutureDate, maxFutureDate);
+		setFutureAt(toDatetimeLocalValue(clamped));
+	}
+
 	async function predict() {
 		if (sensorId == null || predicting) return;
+
+		// Enforce 24h horizon client-side even if someone bypasses input constraints
+		if (!futureInRange) {
+			setErr("Future time must be within the next 24 hours.");
+			return;
+		}
 
 		setErr(null);
 		setPredicting(true);
@@ -160,17 +232,17 @@ export default function SensorPredictor() {
 		}
 	}
 
-	const futureLocal = useMemo(
-		() => new Date(futureAt).toLocaleString(),
-		[futureAt]
-	);
+	const futureLocal = useMemo(() => {
+		const d = new Date(futureAt);
+		return Number.isNaN(d.getTime()) ? "Invalid date" : d.toLocaleString();
+	}, [futureAt]);
 
 	const prettyValue = useMemo(() => {
 		if (!result) return null;
 		const maxFrac = result.metric === "celsius" ? 1 : 1;
-		return `${fmtNum(result.prediction, maxFrac)} ${
+		return `${fmtNum(result.prediction, maxFrac)} ${(
 			result.unit ?? ""
-		}`.trim();
+		).trim()}`.trim();
 	}, [result]);
 
 	const riskHint = useMemo(() => {
@@ -254,7 +326,9 @@ export default function SensorPredictor() {
 							<input
 								type="datetime-local"
 								value={futureAt}
-								onChange={(e) => setFutureAt(e.target.value)}
+								min={minFutureAtStr}
+								max={maxFutureAtStr}
+								onChange={(e) => onFutureChange(e.target.value)}
 								className="rounded-lg border border-white/10 bg-black/20 px-2 py-2 text-sm [color-scheme:dark]"
 							/>
 						</div>
@@ -263,7 +337,14 @@ export default function SensorPredictor() {
 							onClick={predict}
 							className="rounded-lg bg-white/10 hover:bg-white/15 px-3 py-2 text-sm"
 							type="button"
-							disabled={predicting || sensorId == null}
+							disabled={
+								predicting || sensorId == null || !futureInRange
+							}
+							title={
+								!futureInRange
+									? "Choose a time within the next 24 hours"
+									: "Predict"
+							}
 						>
 							Predict
 						</button>
@@ -278,6 +359,18 @@ export default function SensorPredictor() {
 								</div>
 							)}
 						</div>
+					</div>
+
+					<div className="flex flex-wrap items-center gap-2 text-xs opacity-75">
+						<Pill>Max horizon: 24h</Pill>
+						<Pill>
+							Allowed: {minFutureAtStr.replace("T", " ")} →{" "}
+							{maxFutureAtStr.replace("T", " ")}
+						</Pill>
+						{horizonMinutes != null && (
+							<Pill>Horizon: {horizonMinutes} min</Pill>
+						)}
+						{!futureInRange && <Pill>Out of range</Pill>}
 					</div>
 
 					{err && (
